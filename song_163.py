@@ -7,7 +7,7 @@ from config import *
 import pymongo
 
 client = pymongo.MongoClient(MONGO_URL)
-db = client[MONGO_DB2]
+db = client[MONGO_DB3]
 
 
 class Music163(object):
@@ -48,11 +48,20 @@ class Music163(object):
         artistss = self.song_dict.get('artists')
         com_counts = self.song_dict.get('com_count')
         songs = list(zip(ids, names, albums, artistss, com_counts))
-        try:
-            if db[MONGO_TABLE2].insert(songs):
-                print('存储到MongoDB成功', songs)
-        except Exception:
-            print('存储到MongoDB失败', songs)
+        if songs:
+            for song in songs:
+                product = {
+                    'id': song[0],
+                    'name': song[1],
+                    'album': song[2],
+                    'artists': song[3],
+                    'com_count': song[4]
+                }
+                try:
+                    if db[MONGO_TABLE3].insert(product):
+                        print('存储到MongoDB成功', product)
+                except Exception:
+                    print('存储到MongoDB失败', product)
 
     def get_songs_list(self):
         url = r'http://music.163.com/api/search/pc'

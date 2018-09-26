@@ -9,3 +9,6 @@ KEYWORD='街拍'
 
 MONGO_DB2 = 'taobao'
 MONGO_TABLE2 = 'meishi'
+
+MONGO_DB3 = 'netease'
+MONGO_TABLE3 = 'song'
