@@ -41,12 +41,18 @@ class Music163(object):
         df.to_csv('douyin_songs_new.csv', index=False)
         # print(df)
 
-    def save_to_mongoDB(product):
+    def save_to_mongoDB(self):
+        ids = self.song_dict.get('id')
+        names = self.song_dict.get('name')
+        albums = self.song_dict.get('album')
+        artistss = self.song_dict.get('artists')
+        com_counts = self.song_dict.get('com_count')
+        songs = list(zip(ids, names, albums, artistss, com_counts))
         try:
-            if db[MONGO_TABLE2].insert(product):
-                print('存储到MongoDB成功', product)
+            if db[MONGO_TABLE2].insert(songs):
+                print('存储到MongoDB成功', songs)
         except Exception:
-            print('存储到MongoDB失败', product)
+            print('存储到MongoDB失败', songs)
 
     def get_songs_list(self):
         url = r'http://music.163.com/api/search/pc'
@@ -73,7 +79,7 @@ class Music163(object):
             page += 30
             time.sleep(1)
         self.save_to_file()
-        self.save_to_mongoDB(self.song_dict)
+        self.save_to_mongoDB()
 
     def comment_count(self, song_id):
         url = "http://music.163.com/weapi/v1/resource/comments/R_SO_4_" + song_id + "?csrf_token="
